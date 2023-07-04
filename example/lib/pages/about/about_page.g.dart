@@ -36,7 +36,7 @@ class AboutPageController {
 class AboutPageProvider {
   const AboutPageProvider._();
 
-  static const String? flavor = 'target';
+  static const String? flavor = null;
 
   static const String name = '关于';
 
@@ -60,13 +60,24 @@ class AboutPageProvider {
 
   static Future<T?> pushByNamed<T extends Object?>(
     BuildContext context, {
+    bool? ignoreInterceptor,
     Key? key,
   }) {
-    return Navigator.of(context).pushNamed(
-      routeName,
-      arguments: <String, dynamic>{
-        'key': key,
-      },
-    );
+    Future<T?> next() => Navigator.of(context).pushNamed(
+          routeName,
+          arguments: <String, dynamic>{
+            'key': key,
+            'route_fullscreenDialog': false,
+            'route_maintainState': true,
+          },
+        );
+    if (ignoreInterceptor != null && ignoreInterceptor) return next();
+    return globalAuth(context, routeName,
+        arguments: <String, dynamic>{
+          'key': key,
+          'route_fullscreenDialog': false,
+          'route_maintainState': true,
+        },
+        next: next) as Future<T?>;
   }
 }

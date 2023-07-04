@@ -79,6 +79,7 @@ class ParamsPageProvider {
   static Future<T?> pushByNamed<T extends Object?>(
     BuildContext context,
     String paramA1, {
+    bool? ignoreInterceptor,
     Key? key,
     required String paramB,
     String? paramC,
@@ -86,17 +87,33 @@ class ParamsPageProvider {
     String paramG = 'xxx',
     String? Function(String? info)? callback,
   }) {
-    return Navigator.of(context).pushNamed(
-      routeName,
-      arguments: <String, dynamic>{
-        'param_a_1': paramA1,
-        'key': key,
-        'param_b': paramB,
-        'param_c': paramC,
-        'param_f': paramF,
-        'param_g': paramG,
-        'callback': callback,
-      },
-    );
+    Future<T?> next() => Navigator.of(context).pushNamed(
+          routeName,
+          arguments: <String, dynamic>{
+            'param_a_1': paramA1,
+            'key': key,
+            'param_b': paramB,
+            'param_c': paramC,
+            'param_f': paramF,
+            'param_g': paramG,
+            'callback': callback,
+            'route_fullscreenDialog': false,
+            'route_maintainState': true,
+          },
+        );
+    if (ignoreInterceptor != null && ignoreInterceptor) return next();
+    return globalAuth(context, routeName,
+        arguments: <String, dynamic>{
+          'param_a_1': paramA1,
+          'key': key,
+          'param_b': paramB,
+          'param_c': paramC,
+          'param_f': paramF,
+          'param_g': paramG,
+          'callback': callback,
+          'route_fullscreenDialog': false,
+          'route_maintainState': true,
+        },
+        next: next) as Future<T?>;
   }
 }

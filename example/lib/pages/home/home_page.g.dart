@@ -66,6 +66,8 @@ class HomePageProvider {
       routeName,
       arguments: <String, dynamic>{
         'key': key,
+        'route_fullscreenDialog': false,
+        'route_maintainState': true,
       },
     );
   }

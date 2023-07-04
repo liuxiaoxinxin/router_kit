@@ -1,5 +1,6 @@
 import 'package:example/app/app_router.dart';
 import 'package:example/pages/about/about_page.dart';
+import 'package:example/pages/login/login_page.dart';
 import 'package:example/pages/params/params_page.dart';
 import 'package:example/pages/payment/payment_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,29 +37,40 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             title: Text('Payment'),
             onTap: () {
-              AppRouter.instance.pushNamed(
-                context,
-                PaymentPageProvider.routeName,
-                arguments: PaymentPageProvider.routeArgument('a', null),
-              );
+              // AppRouter.instance.pushNamed(
+              //   context,
+              //   PaymentPageProvider.routeName,
+              //   arguments: PaymentPageProvider.routeArgument('a', null),
+              // );
+              PaymentPageProvider.pushByNamed(context, 'a', null);
             },
           ),
           ListTile(
             title: Text('Params'),
             onTap: () {
-              AppRouter.instance.pushNamed(
-                context,
-                ParamsPageProvider.routeName,
-                arguments:
-                    ParamsPageProvider.routeArgument('aaa', paramB: 'bbb'),
-              );
+              // AppRouter.instance.pushNamed(
+              //   context,
+              //   ParamsPageProvider.routeName,
+              //   arguments:
+              //       ParamsPageProvider.routeArgument('aaa', paramB: 'bbb'),
+              // );
+              ParamsPageProvider.pushByNamed(context, 'aa', paramB: 'bb');
             },
           ),
           ListTile(
             title: Text('About'),
             onTap: () {
-              AppRouter.instance
-                  .pushNamed(context, AboutPageProvider.routeName);
+              // AppRouter.instance
+              //     .pushNamed(context, AboutPageProvider.routeName);
+              AboutPageProvider.pushByNamed(context);
+            },
+          ),
+          ListTile(
+            title: Text('Login'),
+            onTap: () {
+              // AppRouter.instance
+              //     .pushNamed(context, AboutPageProvider.routeName);
+              LoginPageProvider.pushByNamed(context);
             },
           ),
         ],

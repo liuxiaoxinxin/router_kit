@@ -8,7 +8,8 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  router_annotation: ^2.0.0
+  router_annotation:
+    path: ../router_annotation
 
   analyzer: ^5.2.0
   logging: ^1.0.0

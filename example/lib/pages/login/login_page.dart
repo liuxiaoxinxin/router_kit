@@ -6,6 +6,7 @@ part 'login_page.g.dart';
 @rca.Page(
   name: '登录',
   routeName: '/login',
+  fullscreenDialog: true, // 模态弹出
 )
 class LoginPage extends StatefulWidget {
   const LoginPage({

@@ -4,10 +4,20 @@ import 'package:router_annotation/router_annotation.dart' as rca;
 
 part 'about_page.g.dart';
 
+Future<Object?> globalAuth(
+  Object context,
+  String routeName, {
+  Object? arguments,
+  rca.Next? next,
+}) async {
+  // todo 去登录
+  return next?.call();
+}
+
 @rca.Page(
   name: '关于',
   routeName: '/about',
-  flavor: 'target',
+  interceptor: globalAuth, // 拦截器
 )
 class AboutPage extends StatefulWidget {
   const AboutPage({

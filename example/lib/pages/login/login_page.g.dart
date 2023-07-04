@@ -66,6 +66,8 @@ class LoginPageProvider {
       routeName,
       arguments: <String, dynamic>{
         'key': key,
+        'route_fullscreenDialog': true,
+        'route_maintainState': true,
       },
     );
   }

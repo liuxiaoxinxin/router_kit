@@ -91,6 +91,8 @@ class PaymentPageProvider {
         'param_b': paramB,
         'param_c': paramC,
         'param_d': paramD,
+        'route_fullscreenDialog': false,
+        'route_maintainState': true,
       },
     );
   }

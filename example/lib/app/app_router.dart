@@ -142,9 +142,19 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
 
   Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     if (routes.containsKey(settings.name)) {
+      bool maintainState = true;
+      bool fullscreenDialog = false;
+      if (settings.arguments != null && settings.arguments is Map<String, dynamic>) {
+        final Map<String, dynamic> map =
+            settings.arguments! as Map<String, dynamic>;
+        maintainState = map['route_maintainState'] as bool;
+        fullscreenDialog = map['route_fullscreenDialog'] as bool;
+      }
       return CupertinoPageRoute<dynamic>(
         builder: routes[settings.name]!,
         settings: settings,
+        maintainState: maintainState,
+        fullscreenDialog: fullscreenDialog,
       );
     }
     return null;

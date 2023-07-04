@@ -10,6 +10,9 @@ class PageInfo {
     required this.routeName,
     required this.fieldRename,
     required this.constructor,
+    required this.interceptor,
+    required this.fullscreenDialog,
+    required this.maintainState,
   });
 
   final Uri uri;
@@ -19,6 +22,9 @@ class PageInfo {
   final String routeName;
   final FieldRename fieldRename;
   final ConstructorElement constructor;
+  final ExecutableElement? interceptor;
+  final bool fullscreenDialog;
+  final bool maintainState;
 
   String get controllerDisplayName => '${displayName}Controller';
 

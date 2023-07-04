@@ -92,7 +92,6 @@ class PageWriter {
     // blank
     _buffer.writeln();
 
-    //
     _buffer.writeln(
         'static final WidgetBuilder routeBuilder = (BuildContext context) {');
     if (info.constructor.parameters.isNotEmpty) {
@@ -165,20 +164,43 @@ class PageWriter {
           '[${info.constructor.parameters.where((ParameterElement element) => !element.isNamed && element.isOptional).map((ParameterElement element) => '${formatPrettyDisplay(element.type)} ${element.name}${element.hasDefaultValue ? ' = ${element.defaultValueCode}' : ''}').join(', ')},]',
         if (info.constructor.parameters
             .any((ParameterElement element) => element.isNamed))
-          '{${info.constructor.parameters.where((ParameterElement element) => element.isNamed).map((ParameterElement element) => '${element.isRequiredNamed ? 'required ' : ''}${formatPrettyDisplay(element.type)} ${element.name}${element.hasDefaultValue ? ' = ${element.defaultValueCode}' : ''}').join(', ')},}',
+          '''
+          { 
+            ${info.interceptor != null ? 'bool? ignoreInterceptor, ' : ''}
+            ${info.constructor.parameters.where((ParameterElement element) => element.isNamed).map((ParameterElement element) => '${element.isRequiredNamed ? 'required ' : ''}${formatPrettyDisplay(element.type)} ${element.name}${element.hasDefaultValue ? ' = ${element.defaultValueCode}' : ''}').join(', ')},
+            }
+          ''',
       ].join(', ')}) {')
       ..writeAll(<String>[
-        if (info.constructor.parameters.isNotEmpty) ...<String>[
-          'return Navigator.of(context).pushNamed(routeName, arguments: <String, dynamic>{${info.constructor.parameters.map((ParameterElement element) => "'${info.convertField(element.name)}': ${element.name},").join('\n')}},);',
-        ],
-        if (info.constructor.parameters.isEmpty) ...<String>[
-          'return Navigator.of(context).pushNamed(routeName);',
-        ],
+        if (info.interceptor != null)
+          '''
+    Future<T?> next() => Navigator.of(context).pushNamed(routeName, ${_navigatorArgumentsCode()},);
+    if (ignoreInterceptor != null && ignoreInterceptor) return next();
+    return ${info.interceptor!.name}(context, routeName, ${_navigatorArgumentsCode()}, next: next) as Future<T?>;
+            '''
+        else
+          'return Navigator.of(context).pushNamed(routeName, ${_navigatorArgumentsCode()},);',
       ], '\n')
       ..writeln('}');
 
     // end
     _buffer.writeln('}');
+  }
+
+  String _navigatorArgumentsCode() {
+    List<String> parameters;
+    if (info.constructor.parameters.isNotEmpty) {
+      parameters = info.constructor.parameters.map((ParameterElement element) {
+        return "'${info.convertField(element.name)}': ${element.name},";
+      }).toList();
+    } else {
+      parameters = <String>[];
+    }
+    parameters.add(
+        "'route_fullscreenDialog': ${info.fullscreenDialog ? 'true' : 'false'},");
+    parameters
+        .add("'route_maintainState': ${info.maintainState ? 'true' : 'false'},");
+    return 'arguments: <String, dynamic>{${parameters.join('\n')}}';
   }
 
   @override

@@ -54,6 +54,15 @@ class PageParser {
           element: element);
     }
 
+    ExecutableElement? interceptor;
+    final ConstantReader? inter = annotation.peek('interceptor');
+    if (inter != null) {
+      interceptor = inter.objectValue.toFunctionValue();
+    }
+
+    final bool maintainState = annotation.read('maintainState').boolValue;
+    final bool fullscreenDialog = annotation.read('fullscreenDialog').boolValue;
+
     return PageInfo(
       uri: buildStep.inputId.uri,
       displayName: element.displayName,
@@ -62,6 +71,9 @@ class PageParser {
       routeName: routeName!,
       fieldRename: fieldRename,
       constructor: constructor,
+      interceptor: interceptor,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
     );
   }
 }
